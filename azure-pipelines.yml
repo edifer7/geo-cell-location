@@ -1,7 +1,51 @@
-name: $(Date:yyyyMMdd).$(Rev:.r)
-variables:
-  var1: value1
-jobs:
-- job: One
-  steps:
-  - script: echo First step!
+pool:
+
+  vmImage: 'macOS 10.13'
+
+
+
+steps:
+
+- task: Xcode@5
+
+  displayName: 'Build the app using Xcode'
+
+  inputs:
+
+    actions: 'clean build analyze archive'
+
+    sdk: 'iphoneos'
+
+    scheme: 'HelloiOS'
+
+    configuration: 'Debug'
+
+    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
+
+    useXcpretty: 'false'
+
+    args: '-archivePath $(agent.buildDirectory)/HelloiOS'
+
+
+
+- task: ArchiveFiles@2
+
+  displayName: 'Package .xcarchive into a zip file'
+
+  inputs:
+
+    rootFolderOrFile: '$(agent.buildDirectory)/HelloiOS.xcarchive/'
+
+    archiveFile: '$(build.artifactStagingDirectory)/HelloiOS.xcarchive.zip'
+
+
+
+- task: PublishBuildArtifacts@1
+
+  inputs:
+
+    pathToPublish: '$(build.artifactStagingDirectory)/HelloiOS.xcarchive.zip'
+
+    artifactName: 'xcarchive-files'
+
+    artifactType: 'container'
