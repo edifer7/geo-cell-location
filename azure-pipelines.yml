@@ -1,46 +1,91 @@
 pool:
 
+
+
   vmImage: 'macOS 10.13'
 
+
+
 variables:
+
   scheme: ''
+
   sdk: 'iphoneos'
+
   configuration: 'Release'
+
  
+
 steps:
+
+
 
 - task: Xcode@5
 
+
+
   displayName: 'Build the app using Xcode'
 
+
+
   inputs:
+
     sdk: '$(sdk)'
+
     scheme: '$(scheme)'
+
     configuration: '$(configuration)'
+
     xcodeVersion: 'default' # Options: default, 10, 9, 8, specifyPath
+
     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
+
     packageApp: false
+
+
+
+
 
 
 
 - task: ArchiveFiles@2
 
+
+
   displayName: 'Package .xcarchive into a zip file'
+
+
 
   inputs:
 
+
+
     rootFolderOrFile: '$(agent.buildDirectory)/HelloiOS.xcarchive/'
+
+
 
     archiveFile: '$(build.artifactStagingDirectory)/HelloiOS.xcarchive.zip'
 
 
 
+
+
+
+
 - task: PublishBuildArtifacts@1
+
+
 
   inputs:
 
+
+
     pathToPublish: '$(build.artifactStagingDirectory)/HelloiOS.xcarchive.zip'
 
+
+
     artifactName: 'xcarchive-files'
+
+
 
     artifactType: 'container'
