@@ -14,23 +14,11 @@ steps:
   displayName: 'Build the app using Xcode'
 
   inputs:
-
-    actions: 'clean build analyze archive'
-
     sdk: '$(sdk)'
-
     scheme: '$(scheme)'
-
-    configuration: 'Debug'
-
+    configuration: '$(configuration)'
     xcodeVersion: 'default' # Options: default, 10, 9, 8, specifyPath
-
-    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
-
-    useXcpretty: 'false'
-
-    args: '-archivePath $(agent.buildDirectory)/HelloiOS'
-        
+    exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
     packageApp: false
 
 
