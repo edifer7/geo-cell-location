@@ -2,8 +2,11 @@ pool:
 
   vmImage: 'macOS 10.13'
 
-
-
+variables:
+  scheme: ''
+  sdk: 'iphoneos'
+  configuration: 'Release'
+ 
 steps:
 
 - task: Xcode@5
@@ -14,17 +17,21 @@ steps:
 
     actions: 'clean build analyze archive'
 
-    sdk: 'iphoneos'
+    sdk: '$(sdk)'
 
-    scheme: 'HelloiOS'
+    scheme: '$(scheme)'
 
     configuration: 'Debug'
+
+    xcodeVersion: 'default' # Options: default, 10, 9, 8, specifyPath
 
     xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
 
     useXcpretty: 'false'
 
     args: '-archivePath $(agent.buildDirectory)/HelloiOS'
+        
+    packageApp: false
 
 
 
